@@ -1,0 +1,148 @@
+{% extends "review/base.html" %}
+{% load random_image %}
+{% block content %}
+
+<div class="main-container">
+    <section class="bg-dark text-white space-xlg jarallax" data-jarallax data-speed="0.2">
+        <img alt="Image" src="media/{% random_image "movie_pics/" %}" class="bg-image opacity-40 jarallax-img" />
+        <div class="container">
+            <div class="row text-center justify-content-center section-intro">
+                <div class="col-12 col-md-10 col-lg-8">
+                    <h1 class="display-3">Ready, Set, Grow.</h1>
+                    <span class="lead">Your source for reviews and ratings to help maximize your entertainment
+                        experience. Whether it is a movie, TV series/show, music videos or stage play, our reviews
+                        will help you find the perfect option.</span>
+                </div>
+                <!--end of col-->
+            </div>
+            <!--end of row-->
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-10 col-lg-8">
+                    <form class="card card-sm">
+                        <div class="card-body row no-gutters align-items-center">
+                            <div class="col-auto">
+                                <i class="icon-magnifying-glass h4 text-body"></i>
+                            </div>
+                            <!--end of col-->
+                            <div class="col">
+                                <input class="form-control form-control-lg form-control-borderless" type="search"
+                                    placeholder="Search topics or keywords" />
+                            </div>
+                            <!--end of col-->
+                            <div class="col-auto">
+                                <button class="btn btn-lg btn-success" type="submit">Search</button>
+                            </div>
+                            <!--end of col-->
+                        </div>
+                    </form>
+                </div>
+                <!--end of col-->
+            </div>
+            <!--end of row-->
+        </div>
+        <!--end of container-->
+    </section>
+    <!--end of section-->
+    <div class="main-container">
+        <section class="space-sm flush-with-above">
+            <div class="container">
+                <div class="row justify-content-center mb-5">
+                    <div class="col-auto">
+                        <h3 class="h4">Find the best reviews in town</h3>
+                    </div>
+                    <!--end of col-->
+                </div>
+                <ul class="row feature-list feature-list-sm">
+                    {% for movie in movies %}
+                    <li class="col-12 col-md-6 col-lg-4">
+                        <div class="card">
+                            <a href="#">
+                                <img class="card-img-top" src="{{ movie.image.url }}" alt="Card image cap" width="100%"
+                                    height="200px">
+                            </a>
+                            <div class="card-body">
+                                <h4 class="card-title">{{ movie.title }}</h4>
+                                <p class="card-text">
+                                    {% for cast in movie.cast.all %}
+                                    {{ cast.name|truncatewords:12 }}{% if not forloop.last %},
+                                    {% endif %}
+                                    {% endfor %}
+                                </p>
+                            </div>
+                            <div class="card-footer card-footer-borderless d-flex justify-content-between">
+                                <div class="text-small">
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item"><i class="fa fa-calendar-check-o"></i>
+                                            {{ movie.release_date|date:'F d, Y' }}</li>
+                                        <!-- <li class="list-inline-item"><i class="fa fa-message"></i> 14</li> -->
+                                    </ul>
+                                </div>
+                                <div class="dropup">
+                                    <button
+                                        class="btn btn-sm btn-outline-primary dropdown-toggle dropdown-toggle-no-arrow"
+                                        type="button" id="SidekickButton" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                        <i class="icon-dots-three-horizontal"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-sm" aria-labelledby="SidekickButton">
+                                        <a class="dropdown-item" href="#">Save</a>
+                                        <a class="dropdown-item" href="#">Share</a>
+                                        <a class="dropdown-item" href="#">Comment</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#">Report</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!--end of col-->
+                    {% endfor %}
+
+                </ul>
+                <!--end of row-->
+                <div class="col text-center">
+                    <a href="#" class="text-small">Explore all movies &rsaquo;</a>
+                </div>
+            </div>
+            <!--end of container-->
+        </section>
+        <!--end of section-->
+        <section>
+            <div class="container">
+                <div class="row justify-content-center mb-5">
+                    <div class="col-auto">
+                        <h3 class="h4">Browse articles by category</h3>
+                    </div>
+                    <!--end of col-->
+                </div>
+                <!--end of row-->
+                <div class="row justify-content-center">
+                    <div class="col-12 col-lg-10">
+                        <ul class="feature-list feature-list-sm row">
+
+                            {% for category in categories %}
+                            <li class="col-6 col-md-3">
+                                <a class="card text-center" href="#">
+                                    <div class="card-body">
+                                        <img src="{{ category.image.url }}" alt="" class="cat_img mb-3" width="60px"
+                                            height="60px">
+                                        <!-- <i class="icon-area-graph text-red display-4"></i> -->
+                                        <h6 class="title-decorative">{{ category.name }}</h6>
+                                    </div>
+                                </a>
+                            </li>
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                    <!--end of col-->
+                </div>
+                <!--end of row-->
+            </div>
+            <!--end of container-->
+        </section>
+        <!--end of section-->
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,15 @@
+{% extends "review/base.html" %}
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-7">
+        <h2>You have been logged out.</h2>
+        <div class="text-center">
+            <span class="text-small"><a href="{% url 'login' %}">Log in again</a>
+            </span>
+        </div>
+    </div>
+    <!--end of col-->
+</div>
+
+{% endblock content %}

@@ -1,0 +1,60 @@
+{% extends "users/base.html" %}
+{% load crispy_forms_tags %}
+{% load myfilters %}
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-7">
+        <div class="card card-lg text-center">
+            <div class="card-body">
+                <div class="mb-5">
+                    <h1 class="h2 mb-2">Hello again</h1>
+                    <span>Sign in to your account to continue</span>
+                </div>
+                <div class="row no-gutters justify-content-center">
+                    <form method="POST" class="text-left col-lg-8">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="{{ form.username.id_for_label }}">Username*</label>
+                            {{ form.username|addcss:'form-control form-control-lg' }}
+                            <p class="text-small" style="color:red">{{ form.username.errors.as_text  }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.email.id_for_label }}">Email Address*</label>
+                            {{ form.email|addcss:'form-control form-control-lg' }}
+                            <p class="text-small" style="color:red">{{ form.email.errors.as_text  }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.password1.id_for_label }}">Password*</label>
+                            {{ form.password1|addcss:'form-control form-control-lg' }}
+                            <p class="text-small" style="color:red">{{ form.password1.errors.as_text  }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.password2.id_for_label }}">Confirm Password*</label>
+                            {{ form.password2|addcss:'form-control form-control-lg' }}
+                            <p class="text-small" style="color:red">{{ form.password2.errors.as_text  }}</p>
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-lg btn-primary">Sign Up</button>
+                        </div>
+                        <div class="text-center">
+                            <span class="text-small text-muted">By clicking 'Create Account' you agree to our <a
+                                    href="#">Terms</a>, <a href="#">Privacy Policy</a>&nbsp;and <a href="#">Security
+                                    Policy</a>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+                <!--end of row-->
+            </div>
+        </div>
+        <div class="text-center">
+            <span class="text-small">Already have an account? <a href="{% url 'login' %}">Log in here</a>
+            </span>
+        </div>
+    </div>
+    <!--end of col-->
+</div>
+
+{% endblock content %}
