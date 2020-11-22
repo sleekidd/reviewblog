@@ -1,0 +1,93 @@
+{% extends "review/base.html" %}
+{% load random_image %}
+{% block content %}
+
+<div class="main-container">
+    <div class="main-container">
+        <section class="space-sm">
+            <div class="container">
+                <div class="row">
+                    <div class="col text-center">
+                        <div class="mb-3">
+                            <a href="#" class="btn btn-secondary mb-1">Technology</a>
+                            <a href="#" class="btn btn-secondary mb-1">Lifestyle</a>
+                            <a href="#" class="btn btn-secondary mb-1">Marketing</a>
+                            <a href="#" class="btn btn-secondary mb-1">Health &amp; Fitness</a>
+                            <a href="#" class="btn btn-secondary mb-1">Music</a>
+                            <a href="#" class="btn btn-secondary mb-1">Productivity</a>
+                        </div>
+                        <a href="#" class="text-small">Explore all categories &rsaquo;</a>
+                    </div>
+                    <!--end of col-->
+                </div>
+                <!--end of row-->
+            </div>
+            <!--end of container-->
+        </section>
+        <!--end of section-->
+        <section class="space-sm flush-with-above">
+            <div class="container">
+                <div class="row mb-4">
+                    <div class="col-12 d-flex justify-content-between">
+                        <div>
+                            <span class="text-muted text-small">Results 1 - 12 of 25</span>
+                        </div>
+                        <form class="d-flex align-items-center">
+                            <span class="mr-2 text-muted text-small text-nowrap">Sort by:</span>
+                            <select class="custom-select">
+                                <option value="alpha">Alphabetical</option>
+                                <option value="old-new" selected>Newest</option>
+                                <option value="new-old">Popular</option>
+                                <option value="recent">Recently Updated</option>
+                            </select>
+                        </form>
+                    </div>
+                    <!--end of col-->
+                </div>
+                <!--end of row-->
+                <ul class="row feature-list feature-list-sm">
+                    {% for movie in movies %}
+                    <li class="col-12 col-md-6 col-lg-4">
+                        <div class="card">
+                            <a href="#">
+                                <img class="card-img-top" src="{{ movie.image.url }}" alt="Card image cap" width="100%"
+                                    height="200px">
+                            </a>
+                            <div class="card-body">
+                                <h4 class="card-title">{{ movie.title }}</h4>
+                                <p class="card-text">
+                                    {% for cast in movie.cast.all %}
+                                    {{ cast.name|truncatewords:12 }}{% if not forloop.last %},
+                                    {% endif %}
+                                    {% endfor %}
+                                </p>
+                            </div>
+                            <div class="card-footer card-footer-borderless d-flex justify-content-between">
+                                <div class="text-small">
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item"><i class="fa fa-calendar-check-o"></i>
+                                            {{ movie.release_date|date:'F d, Y' }}</li>
+                                        <!-- <li class="list-inline-item"><i class="fa fa-message"></i> 14</li> -->
+                                    </ul>
+                                </div>
+                                <div class="dropup">
+                                    <img alt="Image" src="{{ movie.author.profile.image.url }}"
+                                        class="avatar avatar-xs" />
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!--end of col-->
+                    {% endfor %}
+
+                </ul>
+                <!--end of row-->
+            </div>
+            <!--end of container-->
+        </section>
+        <!--end of section-->
+    </div>
+</div>
+
+
+{% endblock content %}

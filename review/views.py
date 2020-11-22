@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.views.generic import ListView, DetailView
 from django.http import HttpResponse
 from .models import Category, Movie, Cast, Director
 from django.utils import timezone
@@ -16,3 +17,17 @@ def index(request):
         'categories': Category.objects.all()[:8]
     }
     return render(request, 'review/index.html', context)
+
+
+class MovieListView(ListView):
+    model = Movie
+    template_name = 'review/movies.html'
+    context_object_name = 'movies'
+    ordering = ['-release_date']
+
+
+class MovieDetailView(DetailView):
+    model = Movie
+    # template_name = 'review/movies.html'
+    # context_object_name = 'movies'
+    # ordering = ['-release_date']
