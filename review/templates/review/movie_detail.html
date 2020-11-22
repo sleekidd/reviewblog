@@ -1,5 +1,7 @@
 {% extends "review/base.html" %}
+{% load crispy_forms_tags %}
 {% load random_image %}
+{% load static %}
 {% block content %}
 
 <div class="main-container">
@@ -8,12 +10,12 @@
             <div class="row justify-content-center">
                 <div class="col">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">Home</a>
+                        <li class="breadcrumb-item"><a href="{% url 'review-index' %}">Home</a>
                         </li>
-                        <li class="breadcrumb-item"><a href="pages-app.html">App Pages</a>
+                        <li class="breadcrumb-item"><a href="{% url 'review-all' %}">Movies</a>
                         </li>
 
-                        <li class="breadcrumb-item active" aria-current="page">Item Detail</li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ object.title }}</li>
                     </ol>
                 </div>
                 <!--end of col-->
@@ -118,13 +120,16 @@
                             </li>
                         </ul> -->
                     </article>
+
+
+
                     <hr>
                     <h5 class="mb-4">Discussion</h5>
                     <div class="card">
                         <div class="card-header bg-secondary d-flex justify-content-between">
                             <button class="btn btn-secondary" type="button" data-target="#comment-reply"
                                 data-toggle="collapse" aria-expanded="false" aria-controls="comment-reply">Post a
-                                reply</button>
+                                review</button>
                             <form class="d-flex align-items-center">
                                 <span class="mr-2 text-muted text-small text-nowrap">Sort by:</span>
                                 <select class="custom-select">
@@ -136,177 +141,50 @@
                             </form>
                         </div>
                         <div class="collapse" id="comment-reply">
-                            <form class="card-body">
+                            <form method="POST" class="card-body">
+                                {% csrf_token %}
                                 <div class="form-group">
-                                    <textarea class="form-control from-control-lg" id="comment-reply-text"
-                                        name="comment-reply" rows="4" placeholder="Type your reply here"></textarea>
+                                    {{ comment_form|crispy }}
                                 </div>
-                                <div class="mb-2">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" name="notify-reply"
-                                            id="check-notify">
-                                        <label class="custom-control-label text-small" for="check-notify">Notify me
-                                            when someone replies</label>
-                                    </div>
-                                </div>
+                                {% if user.is_authenticated %}
                                 <div class="d-flex align-items-center">
-                                    <button type="submit" class="btn btn-success mr-3">Submit reply</button>
+                                    <button type="submit" class="btn btn-success mr-3">Submit review</button>
                                     <a href="#comment-reply" class="text-small text-muted" data-toggle="collapse"
                                         aria-expanded="true" aria-controls="comment-reply">Cancel</a>
                                 </div>
+                                {% else %}
+                                <a class="btn btn-outline-info" href="{% url 'login' %}?next={{request.path}}">Log in to
+                                    add a
+                                    comment!</a><br>
+                                {% endif %}
                             </form>
                         </div>
                         <ul class="list-group list-group-flush list-group-comments">
-
+                            {% for comment in comments %}
                             <li class="list-group-item py-4">
                                 <div class="media">
-                                    <img alt="Image" src="assets/img/avatar-female-2.jpg" class="avatar avatar-sm" />
-                                    <div class="media-body">
-                                        <div class="mb-2">
-                                            <span class="h6 mb-0">Kelly Fraiser</span>
-                                            <span class="text-muted">Making awesome products</span>
-                                        </div>
-                                        <p>
-                                            Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet,
-                                            consectetur, adipisci velit, sed quia non numquam eius modi tempora
-                                            incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
-                                        </p>
-                                        <div class="d-flex align-items-center">
-                                            <div class="mr-2">
-                                                <button class="btn btn-sm btn-outline-primary">Reply</button>
-                                                <button class="btn btn-sm btn-outline-primary"><i
-                                                        class="icon-thumbs-up"></i>&nbsp;(2)</button>
-                                            </div>
-                                            <small class="text-muted">1st Dec 2017 • 10:15am</small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </li>
-
-                            <li class="list-group-item py-4">
-                                <div class="media">
-                                    <img alt="Image" src="assets/img/avatar-male-6.jpg" class="avatar avatar-sm" />
-                                    <div class="media-body">
-                                        <div class="mb-2">
-                                            <span class="h6 mb-0">Tim Lester</span>
-                                            <span class="text-muted">Interface Designer @ Squanch</span>
-                                        </div>
-                                        <p>
-                                            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut
-                                            fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem
-                                            sequi nesciunt.
-                                        </p>
-                                        <div class="d-flex align-items-center">
-                                            <div class="mr-2">
-                                                <button class="btn btn-sm btn-outline-primary">Reply</button>
-                                                <button class="btn btn-sm btn-outline-primary"><i
-                                                        class="icon-thumbs-up"></i>
-                                                </button>
-                                            </div>
-                                            <small class="text-muted">1st Dec 2017 • 10:15am</small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="media">
-                                    <img alt="Image" src="assets/img/avatar-female-5.jpg" class="avatar avatar-sm" />
-                                    <div class="media-body">
-                                        <div class="mb-2">
-                                            <span class="h6 mb-0">Carly Pemberton</span>
-                                            <span class="text-muted">Freelance Product Engineer</span>
-                                        </div>
-                                        <p>
-                                            Omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem
-                                            quibusdam et aut officiis debitis aut rerum necessitatibus
-                                        </p>
-                                        <div class="d-flex align-items-center">
-                                            <div class="mr-2">
-                                                <button class="btn btn-sm btn-outline-primary">Reply</button>
-                                                <button class="btn btn-sm btn-outline-primary"><i
-                                                        class="icon-thumbs-up"></i>(4)</button>
-                                            </div>
-                                            <small class="text-muted">1st Dec 2017 • 10:15am</small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="media">
-                                    <img alt="Image" src="assets/img/graphic-product-paydar-thumb.jpg"
+                                    <img alt="Image" src="{{ comment.author.profile.image.url }}"
                                         class="avatar avatar-sm" />
                                     <div class="media-body">
                                         <div class="mb-2">
-                                            <span class="h6 mb-0">Luke Carol</span>
-                                            <span class="text-muted">Product Designer</span>
+                                            <span class="h6 mb-0">{{ comment.author }}</span>
+                                            <!-- <span class="text-muted">Making awesome products</span> -->
                                         </div>
                                         <p>
-                                            Adipisci velit, sed quia non numquam eius modi tempora
+                                            {{ comment.content|safe }}
                                         </p>
                                         <div class="d-flex align-items-center">
-                                            <div class="mr-2">
+                                            <!-- <div class="mr-2">
                                                 <button class="btn btn-sm btn-outline-primary">Reply</button>
                                                 <button class="btn btn-sm btn-outline-primary"><i
-                                                        class="icon-thumbs-up"></i>
-                                                </button>
-                                            </div>
-                                            <small class="text-muted">1st Dec 2017 • 10:15am</small>
+                                                        class="icon-thumbs-up"></i>&nbsp;(2)</button>
+                                            </div> -->
+                                            <small class="text-muted">{{ comment.created_date }}</small>
                                         </div>
                                     </div>
                                 </div>
-
                             </li>
-
-                            <li class="list-group-item py-4">
-                                <div class="media">
-                                    <img alt="Image" src="assets/img/avatar-male-3.jpg" class="avatar avatar-sm" />
-                                    <div class="media-body">
-                                        <div class="mb-2">
-                                            <span class="h6 mb-0">Pip Thompson</span>
-                                            <span class="text-muted">Development at Kin</span>
-                                        </div>
-                                        <p>
-                                            Natus error sit voluptatem accusantium doloremque laudantium, totam rem
-                                            aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto
-                                        </p>
-                                        <div class="d-flex align-items-center">
-                                            <div class="mr-2">
-                                                <button class="btn btn-sm btn-outline-primary">Reply</button>
-                                                <button class="btn btn-sm btn-outline-primary"><i
-                                                        class="icon-thumbs-up"></i>&nbsp;(1)</button>
-                                            </div>
-                                            <small class="text-muted">1st Dec 2017 • 10:15am</small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </li>
-
-                            <li class="list-group-item py-4">
-                                <div class="media">
-                                    <img alt="Image" src="assets/img/avatar-male-1.jpg" class="avatar avatar-sm" />
-                                    <div class="media-body">
-                                        <div class="mb-2">
-                                            <span class="h6 mb-0">Daniel Cameron</span>
-                                            <span class="text-muted">Industrial Designer at Kin</span>
-                                        </div>
-                                        <p>
-                                            Nam HTML tempore, cum soluta nobis est eligendi optio cumque nihil
-                                            impedit quo minus id quod maxime placeat facere possimus, omnis voluptas
-                                            assumenda est
-                                        </p>
-                                        <div class="d-flex align-items-center">
-                                            <div class="mr-2">
-                                                <button class="btn btn-sm btn-outline-primary">Reply</button>
-                                                <button class="btn btn-sm btn-outline-primary"><i
-                                                        class="icon-thumbs-up"></i>&nbsp;(1)</button>
-                                            </div>
-                                            <small class="text-muted">1st Dec 2017 • 10:15am</small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </li>
-
+                            {% endfor %}
                         </ul>
                     </div>
 
@@ -315,9 +193,10 @@
                 <div class="col-12 col-md-4">
                     <div class="card card-borderless bg-secondary">
                         <a class="card-body" href="#">
+                            <span class="title-decorative">Sponsored</span>
                             <div class="d-flex justify-content-between mb-3">
-                                <img alt="Image" src="{{ object.image.url }}" />
-                                <span class="title-decorative">Sponsor</span>
+                                <img alt="Image" src="{% static 'review/img/instagram_2.jpg' %}"
+                                    style="width: 100%; height: auto; margin-bottom: 10px; margin-right: 0px; display: inline-block; vertical-align: bottom;" />
                             </div>
                             <span class="h6">A robust suite of styled elements and pages for Bootstrap 4</span>
                         </a>
@@ -327,11 +206,11 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between">
-                                    <div><i class="icon-text-document mr-1"></i> Created</div>
-                                    <span>17/11/2017</span>
+                                    <div><i class="icon-text-document mr-1"></i> Released Date</div>
+                                    <span>{{ object.release_date|date:'M jS, Y' }}</span>
                                 </div>
                             </li>
-                            <li class="list-group-item">
+                            <!-- <li class="list-group-item">
                                 <div class="d-flex justify-content-between">
                                     <div><i class="icon-edit mr-1"></i> Last updated</div>
                                     <span>23/12/2017</span>
@@ -348,7 +227,7 @@
                                     <div><i class="icon-share mr-1"></i> Shares</div>
                                     <span>52</span>
                                 </div>
-                            </li>
+                            </li> -->
                         </ul>
                     </div>
                     <div class="card">
@@ -379,7 +258,38 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <div>
-                                <span class="h6">Related Products</span>
+                                <span class="h6">Director</span>
+                            </div>
+                            <a href="#">View all &rsaquo;</a>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled list-spacing-sm">
+                                {% for director in object.director.all %}
+
+                                <li>
+                                    <div class="media">
+                                        <a href="#">
+                                            <img alt="Image" src="{{ director.image.url }}"
+                                                class="avatar avatar-sm mr-3" />
+                                        </a>
+                                        <div class="media-body">
+                                            <a href="#">
+                                                <span class="h6 mb-0">{{ director.name }}</span>
+                                                <span class="text-muted">Director</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </li>
+                                {% endfor %}
+
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- end card -->
+                    <!-- <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <div>
+                                <span class="h6">Director</span>
                             </div>
                             <a href="#">View all &rsaquo;</a>
                         </div>
@@ -389,12 +299,11 @@
                                 <li>
                                     <div class="media">
                                         <a href="#">
-                                            <img alt="Image" src="assets/img/graphic-product-bench-thumb.jpg"
-                                                class="avatar avatar-square rounded mr-3" />
+                                            <img alt="Image" src="" class="avatar avatar-square rounded mr-3" />
                                         </a>
                                         <div class="media-body">
                                             <a href="#">
-                                                <span class="h6">Bench</span>
+                                                <span class="h6">Test</span>
                                             </a>
                                             <span class="badge badge-secondary">Productivity</span>
                                             <div class="text-muted">
@@ -411,84 +320,9 @@
                                     </div>
                                 </li>
 
-                                <li>
-                                    <div class="media">
-                                        <a href="#">
-                                            <img alt="Image" src="assets/img/graphic-product-kin-thumb.jpg"
-                                                class="avatar avatar-square rounded mr-3" />
-                                        </a>
-                                        <div class="media-body">
-                                            <a href="#">
-                                                <span class="h6">Kin</span>
-                                            </a>
-                                            <span class="badge badge-secondary">Lifestyle</span>
-                                            <div class="text-muted">
-                                                <ul class="list-inline">
-                                                    <li class="list-inline-item">
-                                                        <small><i class="icon-heart"></i> 84</small>
-                                                    </li>
-                                                    <li class="list-inline-item">
-                                                        <small><i class="icon-message"></i> 21</small>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div class="media">
-                                        <a href="#">
-                                            <img alt="Image" src="assets/img/graphic-product-paydar-thumb.jpg"
-                                                class="avatar avatar-square rounded mr-3" />
-                                        </a>
-                                        <div class="media-body">
-                                            <a href="#">
-                                                <span class="h6">Paydar</span>
-                                            </a>
-                                            <span class="badge badge-secondary">Productivity</span>
-                                            <div class="text-muted">
-                                                <ul class="list-inline">
-                                                    <li class="list-inline-item">
-                                                        <small><i class="icon-heart"></i> 253</small>
-                                                    </li>
-                                                    <li class="list-inline-item">
-                                                        <small><i class="icon-message"></i> 19</small>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div class="media">
-                                        <a href="#">
-                                            <img alt="Image" src="assets/img/graphic-product-pipeline-thumb.jpg"
-                                                class="avatar avatar-square rounded mr-3" />
-                                        </a>
-                                        <div class="media-body">
-                                            <a href="#">
-                                                <span class="h6">pipeline.js</span>
-                                            </a>
-                                            <span class="badge badge-secondary">Development</span>
-                                            <div class="text-muted">
-                                                <ul class="list-inline">
-                                                    <li class="list-inline-item">
-                                                        <small><i class="icon-heart"></i> 84</small>
-                                                    </li>
-                                                    <li class="list-inline-item">
-                                                        <small><i class="icon-message"></i> 25</small>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
                             </ul>
                         </div>
-                    </div>
+                    </div> -->
                     <!-- end card -->
                 </div>
                 <!--end of col-->

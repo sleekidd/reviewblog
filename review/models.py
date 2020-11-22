@@ -24,6 +24,7 @@ class Cast(models.Model):
 
 class Director(models.Model):
     name = models.CharField(max_length=100)
+    image = models.ImageField(default='default.jpg', upload_to='director_pics')
 
     def __str__(self):
         return self.name
@@ -47,3 +48,22 @@ class Movie(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Review(models.Model):
+    movie = models.ForeignKey(
+        Movie, on_delete=models.CASCADE, related_name='review')
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_date = models.DateTimeField(default=timezone.now)
+    approved_comment = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['created_date']
+
+    def approve(self):
+        self.approved_comment = True
+        self.save()
+
+    def __str__(self):
+        return 'Review {} by {}'.format(self.content, self.author)

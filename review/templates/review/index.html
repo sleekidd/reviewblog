@@ -8,7 +8,7 @@
         <div class="container">
             <div class="row text-center justify-content-center section-intro">
                 <div class="col-12 col-md-10 col-lg-8">
-                    <h1 class="display-3">Ready, Set, Grow.</h1>
+                    <h1 class="display-3">Not, Yet, Rated.</h1>
                     <span class="lead">Your source for reviews and ratings to help maximize your entertainment
                         experience. Whether it is a movie, TV series/show, music videos or stage play, our reviews
                         will help you find the perfect option.</span>
@@ -56,12 +56,14 @@
                     {% for movie in movies %}
                     <li class="col-12 col-md-6 col-lg-4">
                         <div class="card">
-                            <a href="#">
+                            <a href="{% url 'review-detail' movie.id %}">
                                 <img class="card-img-top" src="{{ movie.image.url }}" alt="Card image cap" width="100%"
                                     height="200px">
                             </a>
                             <div class="card-body">
-                                <h4 class="card-title">{{ movie.title }}</h4>
+                                <h4 class="card-title">
+                                    <a href="{% url 'review-detail' movie.id %}">{{ movie.title }}</a>
+                                </h4>
                                 <p class="card-text">
                                     {% for cast in movie.cast.all %}
                                     {{ cast.name|truncatewords:12 }}{% if not forloop.last %},
@@ -100,7 +102,7 @@
             <div class="container">
                 <div class="row justify-content-center mb-5">
                     <div class="col-auto">
-                        <h3 class="h4">Browse articles by category</h3>
+                        <h3 class="h4">Browse movies by category</h3>
                     </div>
                     <!--end of col-->
                 </div>
